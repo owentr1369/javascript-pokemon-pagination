@@ -8,6 +8,9 @@ const nextBtn = document.getElementById("btn-next");
 const prevBtn = document.getElementById("btn-prev");
 
 async function handleLoad() {
+  if (currentPage <= 1) {
+    prevBtn.style.display = "none";
+  }
   function getCurrentPage(currentPage) {
     start = (currentPage - 1) * pageSize;
     end = currentPage * pageSize;
@@ -48,26 +51,9 @@ async function handleLoad() {
   }
   handlePokemon();
 
-  nextBtn.addEventListener("click", () => {
-    currentPage++;
-    if (currentPage > totalPages) {
-      currentPage = totalPages;
-    }
-    getCurrentPage(currentPage);
-    handlePokemon();
-  });
-  prevBtn.addEventListener("click", () => {
-    currentPage--;
-    if (currentPage < 1) {
-      currentPage = 1;
-    }
-    getCurrentPage(currentPage);
-    handlePokemon();
-  });
-
   function renderPokeList() {
     let html = "";
-    html += `<li><a>${1}</a></li>`;
+    html += `<li class="active"><a>${1}</a></li>`;
     for (let i = 2; i <= totalPages; i++) {
       html += `<li><a>${i}</a></li>`;
     }
@@ -76,19 +62,62 @@ async function handleLoad() {
   renderPokeList();
 
   function changePage() {
-    const curretPages = document.querySelectorAll(".number-page li");
+    const currentPages = document.querySelectorAll(".number-page li");
 
-    for (let i = 0; i < curretPages.length; i++) {
-      curretPages[i].addEventListener("click", () => {
+    for (let i = 0; i < currentPages.length; i++) {
+      currentPages[i].addEventListener("click", () => {
         let value = i + 1;
         currentPage = value;
         getCurrentPage(currentPage);
-        console.log("currentPage  :>> ", currentPage);
         handlePokemon();
+        if (currentPage == currentPages[i].innerText) {
+          for (let n = 0; n < currentPages.length; n++) {
+            currentPages[n].classList.remove("active");
+          }
+          currentPages[i].classList.add("active");
+        }
       });
     }
   }
+
   changePage();
+
+  nextBtn.addEventListener("click", () => {
+    currentPage++;
+    if (currentPage > totalPages) {
+      currentPage = totalPages;
+    }
+    getCurrentPage(currentPage);
+    let activeTab = document.querySelector(".active");
+    console.log("activeTab :>> ", activeTab);
+
+    activeTab.classList.remove("active");
+    activeTab.nextSibling.classList.add("active");
+
+    handlePokemon();
+    if (currentPage > 1) {
+      prevBtn.style.display = "flex";
+    }
+    // changePage();
+  });
+
+  prevBtn.addEventListener("click", () => {
+    currentPage--;
+    if (currentPage < 1) {
+      currentPage = 1;
+    }
+    if (currentPage <= 1) {
+      prevBtn.style.display = "none";
+    }
+    getCurrentPage(currentPage);
+    let activeTab = document.querySelector(".active");
+    console.log("activeTab :>> ", activeTab);
+
+    activeTab.classList.remove("active");
+    activeTab.previousSibling.classList.add("active");
+
+    handlePokemon();
+  });
 }
 
 handleLoad();
