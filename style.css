@@ -59,6 +59,7 @@ h1 {
   margin: 0;
   text-align: center;
   padding: 4px 2px;
+  text-transform: capitalize;
 }
 
 .content .content__paging {
