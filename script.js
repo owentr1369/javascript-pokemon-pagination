@@ -75,6 +75,8 @@ async function handleLoad() {
             currentPages[n].classList.remove("active");
           }
           currentPages[i].classList.add("active");
+          checkPrevButton();
+          checkNextButton();
         }
       });
     }
@@ -98,6 +100,9 @@ async function handleLoad() {
     if (currentPage > 1) {
       prevBtn.style.display = "flex";
     }
+    if (currentPage >= totalPages) {
+      nextBtn.style.display = "none";
+    }
     // changePage();
   });
 
@@ -117,7 +122,24 @@ async function handleLoad() {
     activeTab.previousSibling.classList.add("active");
 
     handlePokemon();
+    if (currentPage < totalPages) {
+      nextBtn.style.display = "flex";
+    }
   });
+  function checkPrevButton() {
+    if (currentPage <= 1) {
+      prevBtn.style.display = "none";
+    } else if (currentPage > 1) {
+      prevBtn.style.display = "flex";
+    }
+  }
+  function checkNextButton() {
+    if (currentPage >= totalPages) {
+      nextBtn.style.display = "none";
+    } else if (currentPage > 1) {
+      nextBtn.style.display = "flex";
+    }
+  }
 }
 
 handleLoad();
